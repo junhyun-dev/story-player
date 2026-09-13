@@ -1,0 +1,20 @@
+{
+  "name": "story-player",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Interactive story player, local v1 (recorded responder; optional local model responder)",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js",
+    "test:e2e": "PLAYWRIGHT_BROWSERS_PATH=0 playwright test",
+    "test:all": "npm test && npm run test:e2e",
+    "browsers": "PLAYWRIGHT_BROWSERS_PATH=0 playwright install chromium --only-shell",
+    "preview": "node scripts/preview-work.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

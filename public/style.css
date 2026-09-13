@@ -1,0 +1,126 @@
+:root {
+  --bg: #f6f4ef; --panel: #ffffff; --ink: #1f1f1f; --muted: #6b6b6b; --line: #e2ddd3;
+  --user: #dbe8ff; --assistant: #f1ede4; --accent: #2f5d8a; --warn-bg: #fff3c4; --warn-ink: #7a5a00;
+  --danger-bg: #ffe3e0; --danger-ink: #8a2a20; --ok-ink: #2a6b3a;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #17181a; --panel: #202226; --ink: #ececec; --muted: #a2a2a2; --line: #34373d;
+    --user: #24395a; --assistant: #2b2d33; --accent: #7fb0e6; --warn-bg: #4a3d0d; --warn-ink: #ffe08a;
+    --danger-bg: #4a1d19; --danger-ink: #ffb3a9; --ok-ink: #8fd3a0;
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; } /* .pending 등 display 규칙이 hidden 속성을 덮어쓰지 않게 한다 */
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; }
+.topbar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-bottom: 1px solid var(--line); background: var(--panel); }
+.topbar h1 { font-size: 18px; margin: 0; }
+.topbar-left { display: flex; align-items: center; gap: 10px; }
+button.ghost { background: var(--panel); color: var(--ink); border: 1px solid var(--line); padding: 5px 10px; border-radius: 8px; cursor: pointer; font: inherit; font-size: 13px; }
+button.ghost:hover { border-color: var(--accent); }
+.mobile-only { display: none; }
+.listhead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.listhead input { flex: 1; min-width: 0; padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); font: inherit; font-size: 13px; }
+.state { margin: 6px 0; }
+.rowbtns { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+#importErrors ul { margin: 6px 0 0; padding-left: 18px; }
+#importErrors li { margin: 2px 0; }
+.list button .name { display: block; font-weight: 600; }
+.list.archived button { opacity: .75; }
+.list .branchmark { color: var(--accent); margin-right: 4px; }
+.chathead-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.chathead-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.renameform { display: flex; gap: 6px; margin: 8px 0; }
+.renameform input { flex: 1; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); font: inherit; }
+.info.archived { border-left: 3px solid var(--warn-ink); }
+.recap { margin: 8px 0; padding: 8px 12px; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); }
+.recap summary { cursor: pointer; font-weight: 600; }
+.recapnote { margin: 4px 0 8px; font-size: 12px; }
+.recap .line { margin: 4px 0; font-size: 13px; }
+.recap .who { color: var(--muted); margin-right: 6px; }
+.recap .excerpt { white-space: pre-wrap; }
+.recap ul { margin: 4px 0 0; padding-left: 0; list-style: none; }
+.recap li { display: flex; gap: 8px; align-items: baseline; margin: 4px 0; font-size: 13px; }
+.msg.marked { box-shadow: inset 4px 0 0 var(--accent); }
+.msg .marktag { font-size: 11px; background: var(--user); color: var(--ink); padding: 1px 6px; border-radius: 999px; margin-left: 6px; }
+.msg.flash { outline: 2px solid var(--accent); outline-offset: 2px; transition: outline-color .8s; }
+/* 최근 대화로: 메시지 창 안에서 바닥에 붙어 따라오는 버튼. 마지막 말이 보이면 숨긴다([hidden]). */
+.tolatest { position: sticky; bottom: 6px; align-self: center; margin-top: -4px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--accent); font: inherit; font-size: 13px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,.12); }
+.starters { margin: 6px 0; font-size: 13px; }
+.startpicker h2 { margin-top: 14px; }
+.startoptions label { display: block; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; margin-bottom: 6px; cursor: pointer; background: var(--panel); }
+.startoptions label.selected { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+.startoptions .name { font-weight: 600; display: block; }
+.startoptions .sub { display: block; font-size: 12px; color: var(--muted); }
+.startoptions input { margin-right: 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.chips button { background: var(--panel); color: var(--ink); border: 1px solid var(--accent); border-radius: 999px; padding: 5px 12px; cursor: pointer; font: inherit; font-size: 13px; }
+.chips button:hover { background: var(--user); }
+.guide { margin: 6px 0; padding: 6px 12px; border: 1px dashed var(--line); border-radius: 8px; background: var(--panel); font-size: 13px; }
+.guide summary { cursor: pointer; font-weight: 600; }
+.guidetext { white-space: pre-wrap; margin: 6px 0 2px; }
+.guidehint { margin: 4px 0 2px; color: var(--muted); }
+.msg .aside { margin-top: 4px; font-size: 11.5px; color: var(--muted); }
+.msg.endingturn { border-left: 3px solid var(--accent); }
+.endingblock { align-self: stretch; border: 1px solid var(--accent); border-radius: 10px; padding: 10px 14px; background: var(--panel); }
+.endingblock .endtitle { font-weight: 700; margin-bottom: 4px; }
+.endingblock .line { font-size: 13px; margin: 2px 0; }
+.endingblock .actions { margin-top: 8px; display: flex; gap: 12px; flex-wrap: wrap; }
+.topbar small { color: var(--muted); font-weight: normal; margin-left: 6px; }
+.badge { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.badge.warn { background: var(--warn-bg); color: var(--warn-ink); }
+.layout { display: grid; grid-template-columns: 300px 1fr; min-height: calc(100vh - 49px); }
+.sidebar { border-right: 1px solid var(--line); padding: 14px; background: var(--panel); }
+.sidebar h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 18px 0 8px; }
+.sidebar h3 { margin: 6px 0 2px; }
+.list { list-style: none; margin: 0; padding: 0; }
+.list li { margin-bottom: 6px; }
+.list button { width: 100%; text-align: left; padding: 8px 10px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; cursor: pointer; }
+.list button:hover { border-color: var(--accent); }
+.list button.active { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+.list .sub { display: block; font-size: 12px; color: var(--muted); }
+.list .preview { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.list .flag { color: var(--danger-ink); font-size: 12px; margin-left: 4px; }
+button.primary { background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; }
+button.primary:disabled, button:disabled { opacity: .5; cursor: default; }
+.muted { color: var(--muted); font-size: 13px; }
+.chatpane { display: flex; flex-direction: column; padding: 16px; max-width: 900px; width: 100%; height: calc(100vh - 49px); box-sizing: border-box; }
+.empty { color: var(--muted); padding: 40px 10px; text-align: center; }
+.chathead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.notice { margin: 8px 0; padding: 8px 12px; border-radius: 8px; background: var(--danger-bg); color: var(--danger-ink); font-size: 13px; }
+.info { margin: 8px 0; padding: 8px 12px; border-radius: 8px; background: var(--assistant); color: var(--ink); font-size: 13px; }
+button.linklike { background: none; border: none; padding: 0; color: var(--accent); cursor: pointer; font: inherit; font-size: 12px; text-decoration: underline; }
+button.linklike:disabled { opacity: .5; cursor: default; }
+.msg .actions { margin-top: 4px; text-align: right; display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+.list .tag { font-size: 11px; background: var(--assistant); color: var(--ink); padding: 1px 6px; border-radius: 999px; margin-left: 4px; }
+.messages { flex: 1; min-height: 120px; overflow-y: auto; padding: 10px 0; display: flex; flex-direction: column; gap: 10px; }
+#chatView { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+#chatView[hidden] { display: none; }
+.recap { flex: 0 0 auto; max-height: 40vh; overflow-y: auto; }
+.scene { white-space: pre-wrap; background: var(--assistant); border-left: 3px solid var(--accent); padding: 10px 12px; border-radius: 6px; color: var(--ink); }
+.msg { max-width: 78%; padding: 8px 12px; border-radius: 12px; white-space: pre-wrap; word-break: break-word; }
+.msg.user { align-self: flex-end; background: var(--user); }
+.msg.assistant { align-self: flex-start; background: var(--assistant); }
+.msg .who, .scene .who { display: block; font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+.msg .tag { font-size: 11px; background: var(--warn-bg); color: var(--warn-ink); padding: 1px 6px; border-radius: 999px; margin-left: 6px; }
+.status { font-size: 13px; color: var(--muted); min-height: 20px; padding: 4px 0; }
+.status.ok { color: var(--ok-ink); }
+.status.err { color: var(--danger-ink); }
+.pending { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--danger-bg); color: var(--danger-ink); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; }
+.pending button { background: var(--panel); color: var(--ink); border: 1px solid var(--line); padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+.composer { display: flex; gap: 8px; align-items: flex-end; }
+.composer textarea { flex: 1; resize: vertical; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); font: inherit; }
+.hint { font-size: 12px; color: var(--muted); margin: 6px 0 0; }
+.hint code { background: var(--assistant); padding: 0 4px; border-radius: 4px; }
+@media (max-width: 760px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { border-right: none; border-bottom: 1px solid var(--line); }
+  .chatpane { height: auto; min-height: calc(100vh - 49px); }
+  .messages { max-height: 55vh; }
+  .mobile-only { display: inline-block; }
+  /* 한 화면에 목록 또는 채팅 하나만 보인다. 채팅을 열면 채팅으로, '목록' 버튼으로 돌아온다. */
+  body.mobile-chat .sidebar { display: none; }
+  body.mobile-list .chatpane { display: none; }
+  .msg { max-width: 92%; }
+  .chathead { flex-direction: column; align-items: flex-start; }
+}

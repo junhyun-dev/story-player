@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Private Story Player · 로컬 v1</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <button id="toggleListBtn" type="button" class="ghost mobile-only" aria-label="채팅 목록 열기">목록</button>
+      <h1>Private Story Player <small>로컬 v1</small></h1>
+    </div>
+    <span id="responderBadge" class="badge warn">응답기 확인 중…</span>
+  </header>
+  <main class="layout" id="layout">
+    <aside class="sidebar" id="sidebar">
+      <section>
+        <h2>작품</h2>
+        <ul id="workList" class="list"></ul>
+        <p id="workListState" class="muted state">불러오는 중…</p>
+      </section>
+      <section id="workDetail" hidden>
+        <h3 id="workTitle"></h3>
+        <p id="workTagline" class="muted"></p>
+        <p id="workCharacter" class="muted"></p>
+        <div id="startPicker" class="startpicker" hidden>
+          <h2>시작 설정</h2>
+          <div id="startOptions" class="startoptions" role="radiogroup" aria-label="시작 설정"></div>
+        </div>
+        <div class="rowbtns">
+          <button id="newChatBtn" type="button" class="primary">새 채팅 시작</button>
+          <button id="importBtn" type="button" class="ghost">가져오기</button>
+          <input id="importFile" type="file" accept=".jsonl,.json,.txt,application/x-ndjson,text/plain" hidden aria-label="가져올 채팅 파일">
+        </div>
+        <div id="importErrors" class="notice" hidden></div>
+        <div class="listhead">
+          <h2>저장된 채팅</h2>
+          <input id="chatSearch" type="search" placeholder="이름·마지막 말로 찾기" aria-label="채팅 찾기">
+        </div>
+        <ul id="chatList" class="list"></ul>
+        <p id="chatListEmpty" class="muted state" hidden>아직 저장된 채팅이 없습니다. 새 채팅 시작을 눌러 보세요.</p>
+        <p id="chatListNoMatch" class="muted state" hidden>검색 결과가 없습니다.</p>
+        <p id="chatListState" class="muted state" hidden>불러오는 중…</p>
+        <button id="archiveToggle" type="button" class="ghost" hidden aria-expanded="false">보관함 (0)</button>
+        <ul id="archivedList" class="list archived" hidden></ul>
+      </section>
+    </aside>
+    <section class="chatpane" id="chatpane">
+      <div id="emptyState" class="empty">왼쪽에서 작품을 고른 뒤 새 채팅을 시작하거나, 저장된 채팅을 눌러 이어 하세요.</div>
+      <div id="connState" class="empty" hidden>
+        <p id="connText">서버에 연결하지 못했습니다.</p>
+        <button id="reconnectBtn" type="button" class="primary">다시 연결</button>
+      </div>
+      <div id="chatView" hidden>
+        <div class="chathead">
+          <div class="chathead-main">
+            <strong id="chatTitle"></strong>
+            <span id="chatMeta" class="muted"></span>
+          </div>
+          <div class="chathead-actions">
+            <button id="renameBtn" type="button" class="ghost">이름 바꾸기</button>
+            <button id="archiveBtn" type="button" class="ghost">보관</button>
+            <button id="exportBtn" type="button" class="ghost">내보내기</button>
+          </div>
+        </div>
+        <form id="renameForm" class="renameform" hidden>
+          <input id="renameInput" type="text" maxlength="80" aria-label="새 이름" placeholder="이 채팅의 이름">
+          <button type="submit" class="primary">저장</button>
+          <button id="renameCancel" type="button" class="ghost">취소</button>
+        </form>
+        <div id="notices"></div>
+        <details id="recap" class="recap" hidden>
+          <summary id="recapSummary">지난 이야기</summary>
+          <p class="muted recapnote">저장된 원문 발췌와 내가 표시한 장면입니다. 요약이나 캐릭터의 기억이 아닙니다.</p>
+          <div id="recapLast"></div>
+          <div id="recapMarks"></div>
+        </details>
+        <div id="messages" class="messages" role="log" aria-live="polite"></div>
+        <div id="statusLine" class="status" aria-live="polite"></div>
+        <div id="pendingBox" class="pending" hidden>
+          <span id="pendingText">이 입력에는 아직 응답이 없습니다. 입력은 저장돼 있고, 다시 생성을 누르면 응답을 만듭니다.</span>
+          <button id="retryBtn" type="button">다시 생성</button>
+          <button id="cancelBtn" type="button" hidden>취소</button>
+        </div>
+        <div id="starters" class="starters" hidden>
+          <span class="muted">시작 추천 답변(작품에 적힌 것 · 골라서 고쳐 보내도 됩니다)</span>
+          <div id="starterChips" class="chips"></div>
+        </div>
+        <details id="guide" class="guide" hidden>
+          <summary>플레이 가이드 <span class="muted">· 나에게만 보이고 해원에게는 전달되지 않습니다</span></summary>
+          <p id="guideText" class="guidetext"></p>
+          <p id="guideHint" class="guidehint" hidden></p>
+        </details>
+        <form id="sendForm" class="composer">
+          <textarea id="input" rows="2" maxlength="2000" placeholder="해원에게 말을 건다…"></textarea>
+          <button id="sendBtn" type="submit" class="primary">보내기</button>
+        </form>
+        <p class="hint">Enter 보내기 · Shift+Enter 줄바꿈 · 턴마다 자동 저장 · 개발용: 입력에 <code>[[실패]]</code>를 넣으면 첫 응답이 실패하고, 다시 생성을 누르면 성공합니다.</p>
+      </div>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
